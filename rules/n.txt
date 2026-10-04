@@ -1,0 +1,10 @@
+# 设置环境变量
+MYLIB_PATH="/usr/local/lib"
+export LD_LIBRARY_PATH="$MYLIB_PATH:$LD_LIBRARY_PATH"
+
+# 执行任意 shell 命令
+echo "环境变量已设置：LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+
+# 定义可供 EchoLang 调用的 shell 函数（可选）
+shell_ls() { ls -la; }
+shell_pwd() { pwd; }

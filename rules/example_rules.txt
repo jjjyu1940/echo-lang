@@ -1,0 +1,3 @@
+comment 示例规则文件
+MYLIB_PATH="/usr/local/lib"
+export LD_LIBRARY_PATH="$MYLIB_PATH:$LD_LIBRARY_PATH"
