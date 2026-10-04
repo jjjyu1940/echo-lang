@@ -4,6 +4,7 @@ shell;
 ls -la
 pwd
 echo "Hello from shell"
+mkdir n
 ;
 
 echo After shell

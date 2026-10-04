@@ -1,8 +1,9 @@
 #!/bin/bash
 # echoi - EchoLang Interpreter & Compiler
-# Version 0.0.2 (added native commands: rm, ls, pwd, mv, cp, top, ps)
+# Version 0.0.2 (added native commands: rm, ls, pwd, mv, cp, top, ps, cd)
+# Modified: unknown syntax now passed to shell directly.
 
-VERSION="0.0.2-alpha-r1"
+VERSION="0.0.2-alpha-r2"
 
 show_help() {
     cat << 'EOF'
@@ -168,8 +169,8 @@ process_block() {
             ((i++)); continue
         fi
 
-        # ========== 新增：原生命令支持 ==========
-        local native_cmd_regex='^(rm|ls|pwd|mv|cp|top|ps)([[:space:]]+|$)'
+        # ========== 原生命令支持（已加入 cd） ==========
+        local native_cmd_regex='^(rm|ls|pwd|mv|cp|top|ps|cd)([[:space:]]+|$)'
         if echo "$line" | grep -qE "$native_cmd_regex"; then
             if [[ "$mode" == "interpret" ]]; then
                 eval "$line" 2>&1
@@ -183,7 +184,7 @@ process_block() {
             ((i++))
             continue
         fi
-        # ========================================
+        # ==============================================
 
         # === shell 块处理 ===
         if [[ "$line" == "shell;" ]]; then
@@ -378,7 +379,19 @@ process_block() {
             fi
             ((i++)); continue
         fi
-        
+
+        # ========== 新增：未知语法直接交给 Shell 执行 ==========
+        if [[ "$mode" == "interpret" ]]; then
+            eval "$line" 2>&1
+        elif [[ "$mode" == "compile_c" ]]; then
+            local escaped
+            escaped=$(echo "$line" | sed 's/"/\\"/g')
+            printf '    system("%s");\n' "$escaped"
+        elif [[ "$mode" == "compile_sh" ]]; then
+            echo "$line"
+        fi
+        # ====================================================
+
         ((i++))
     done
 }
