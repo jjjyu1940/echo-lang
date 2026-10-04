@@ -1,0 +1,2 @@
+SYNTAX=C99
+LIBS=m
