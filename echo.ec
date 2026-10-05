@@ -13,7 +13,7 @@ name is ;
       echo gitee
 
 
-
+git -v
 name is ;     
 
 ls -la /
